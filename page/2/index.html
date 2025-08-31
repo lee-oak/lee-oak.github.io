@@ -250,7 +250,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2025-08-31 22:23:19" itemprop="dateModified" datetime="2025-08-31T22:23:19+08:00">2025-08-31</time>
+                <time title="修改时间：2025-08-31 23:38:26" itemprop="dateModified" datetime="2025-08-31T23:38:26+08:00">2025-08-31</time>
               </span>
 
           
@@ -265,73 +265,14 @@
 
       
           <h2 id="Linux开发环境配置内容"><a href="#Linux开发环境配置内容" class="headerlink" title="Linux开发环境配置内容"></a>Linux开发环境配置内容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">交叉编译工具链:将文件编译为可在目标平台架构运行的文件</span><br><span class="line">NFS服务器:虚拟机ubuntu与开发板的文件互传</span><br><span class="line">samba:：电脑与虚拟机ubuntu的文件互传</span><br><span class="line">VMtool:</span><br><span class="line">常用终端：</span><br><span class="line">串口驱动：电脑连接 开发板</span><br><span class="line">开发板的烧录</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="1-安装交叉编译工具链"><a href="#1-安装交叉编译工具链" class="headerlink" title="1. 安装交叉编译工具链"></a>1. 安装交叉编译工具链</h2><ol>
-<li><p><strong>更新软件包列表</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>包管理器安装</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu</span><br><span class="line">aarch64-linux-gnu-gcc --version</span><br></pre></td></tr></table></figure></li>
-<li><p><strong>手动安装</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">网站安装</span><br><span class="line">https://releases.linaro.org/components/toolchain/binaries/4.9-2017.01/arm-linux-gnueabihf/</span><br><span class="line">https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads</span><br><span class="line">创建文件夹</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> /usr/local/arm</span><br><span class="line">将压缩包复制到文件夹</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">cp</span> gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz /usr/local/arm/ -f</span><br><span class="line">压缩包解压</span><br><span class="line"><span class="built_in">sudo</span> tar -vxf gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz</span><br><span class="line">打开配置文件并修改环境变量</span><br><span class="line"><span class="built_in">sudo</span> vi /etc/profile</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/local/arm/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/bin</span><br><span class="line">安装一下其他库</span><br><span class="line"><span class="built_in">sudo</span> apt-get install lsb-core lib32stdc++6</span><br><span class="line">验证安装	</span><br><span class="line">arm-none-linux-gnueabihf-gcc --version</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>测试交叉编译</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">创建测试文件hell.c</span><br><span class="line"><span class="comment">#include &lt;stdio.h&gt;</span></span><br><span class="line">int <span class="function"><span class="title">main</span></span>() &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello Cross-Compilation!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">return</span> 0;&#125;</span><br><span class="line"></span><br><span class="line">编译arm程序</span><br><span class="line">arm-linux-gnueabihf-gcc hello.c -o hello_arm  <span class="comment"># 32位</span></span><br><span class="line">aarch64-linux-gnu-gcc hello.c -o hello_aarch64 <span class="comment"># 64位</span></span><br><span class="line"></span><br><span class="line">检查文件类型</span><br><span class="line">file hello_arm  <span class="comment"># 应显示 &quot;ARM&quot;</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="2-配置NFS服务"><a href="#2-配置NFS服务" class="headerlink" title="2. 配置NFS服务"></a>2. 配置NFS服务</h2><ol>
-<li><p><strong>确保ubuntu和开发板IP可以互相ping通</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 192.168.100.100</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>安装NFS服务</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install nfs-kernel-server rpcbind</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>创建NFS共享文件夹</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> nfs</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>修改配置文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/topeet/linux/nfs *(rw,<span class="built_in">sync</span>,no_root_squash)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>重启NFS服务</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> /etc/init.d/nfs-kernel-server restart</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>ubuntu 的 IP 是 192.168.100.100，确保开发板能 ping 通 ubuntu 后，在开发板上执行以下命令挂载 NFS</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t nfs -o nolock,vers=3 192.168.100.100:/home/linux/topeet/nfs /mnt</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="3-配置Samba服务"><a href="#3-配置Samba服务" class="headerlink" title="3.配置Samba服务"></a>3.配置Samba服务</h2><ol>
-<li><p>windows与ubuntu的Ip互相ping通</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping 192.168.100.100</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>执行安装命令</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install samba</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>创建共享文件夹</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> samba</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 777 samba/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>修改配置文件</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">进入配置文件：</span><br><span class="line">vim /etc/samba/smb.conf	</span><br><span class="line">配置文件中添加以下内容：</span><br><span class="line">[samba]</span><br><span class="line">    comment = smbshare home directory</span><br><span class="line">    path = /home/samba/  <span class="comment">#输入自己的路径</span></span><br><span class="line">    valid <span class="built_in">users</span> = topeet  <span class="comment">#用户名</span></span><br><span class="line">    create mask = 0777</span><br><span class="line">    directory mask = 0777</span><br><span class="line">    force user = topeet  <span class="comment">#当前ubuntu用户名</span></span><br><span class="line">    force group = topeet <span class="comment">#当前用户名所在的组</span></span><br><span class="line">    available = <span class="built_in">yes</span></span><br><span class="line">    unix charset = UTF-8</span><br><span class="line">    dos charset = cp936</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>添加用户密码</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> smbpasswd -a topeet</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>重启samba服务</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service smbd restart</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>windows电脑测试</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">\\192.168.100.100</span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="4-安装VMware-Tool"><a href="#4-安装VMware-Tool" class="headerlink" title="4.安装VMware Tool"></a>4.安装VMware Tool</h2><ol>
-<li><p><strong>虚拟机点击安装VMware Tool</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">进入到安装文件夹的目录</span><br><span class="line"><span class="built_in">cd</span> /media/topeet/VMware\Tools</span><br><span class="line">将VMwareTools复制到用户目录下</span><br><span class="line"><span class="built_in">cp</span> VMwareTools-10.3.23-16594550.tar.gz /home/</span><br><span class="line">压缩包解压</span><br><span class="line">tar -vxf VMwareTools-10.3.23-16594550.tar.gz</span><br><span class="line">进入解压后的目录</span><br><span class="line"><span class="built_in">cd</span> vmware-tools-distrib/</span><br><span class="line">执行命令运行程序</span><br><span class="line">./vmware-install.pl</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
-</ol>
-<hr>
-<h2 id="5-demo"><a href="#5-demo" class="headerlink" title="5. demo"></a>5. demo</h2><ol>
-<li><p><strong>创建安装目录</strong>：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/toolchain</span><br></pre></td></tr></table></figure></li>
-</ol>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/07/20/linux%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
